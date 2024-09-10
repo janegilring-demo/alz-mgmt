@@ -1,0 +1,69 @@
+---
+name: 02 Azure Landing Zones Continuous Delivery
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      skip_what_if:
+        description: 'Skip What If Check?'
+        default: false
+        type: boolean
+      management_groups:
+        description: 'Run Steps: Management Groups'
+        type: boolean
+        default: true
+      logging_and_sentinel:
+        description: 'Run Steps: Logging and Sentinel'
+        type: boolean
+        default: true
+      policy_definitions:
+        description: 'Run Steps: Policy Definitions'
+        type: boolean
+        default: true
+      role_definitions:
+        description: 'Run Steps: Role Definitions'
+        type: boolean
+        default: true
+      policy_assignments:
+        description: 'Run Steps: Policy Assignments'
+        type: boolean
+        default: true
+      management_group_diagnostic_settings:
+        description: 'Run Steps: Management Group Diagnostic Settings'
+        type: boolean
+        default: true
+      subscription_placement:
+        description: 'Run Steps: Subscription Placement'
+        type: boolean
+        default: true
+      connectivity:
+        description: 'Run Steps: Connectivity'
+        type: boolean
+        default: true
+      destroy:
+        description: '[DANGER!] Destroy? [DANGER!]'
+        default: false
+        type: boolean
+
+jobs:
+  plan_and_apply:
+    uses: janegilring-demo/alz-mgmt-templates/.github/workflows/cd-template.yaml@main
+    name: 'CD'
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      skip_what_if: ${{ inputs.skip_what_if }}
+      destroy: ${{ inputs.destroy }}
+      management_groups: ${{ inputs.management_groups }}
+      logging_and_sentinel_resource_group: ${{ inputs.logging_and_sentinel }}
+      logging_and_sentinel: ${{ inputs.logging_and_sentinel }}
+      custom_policy_definitions: ${{ inputs.policy_definitions }}
+      custom_role_definitions: ${{ inputs.role_definitions }}
+      management_group_diagnostic_settings: ${{ inputs.management_group_diagnostic_settings }}
+      policy_assignments: ${{ inputs.policy_assignments }}
+      subscription_placement: ${{ inputs.subscription_placement }}
+      connectivity_resource_group: ${{ inputs.connectivity }}
+      hub_and_spoke: ${{ inputs.connectivity }}
