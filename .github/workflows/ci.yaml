@@ -1,0 +1,16 @@
+---
+name: 01 Azure Landing Zones Continuous Integration
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  validate_and_plan:
+    uses: janegilring-demo/alz-mgmt-templates/.github/workflows/ci-template.yaml@main
+    name: 'CI'
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
