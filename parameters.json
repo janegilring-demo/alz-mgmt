@@ -1,0 +1,18 @@
+{
+  "MANAGEMENT_GROUP_ID": "alz",
+  "LOGGING_RESOURCE_GROUP": "rg-alz-logging",
+  "MANAGEMENT_SUBSCRIPTION_ID": "bddfff92-f2f6-4d8a-a360-a520e62eb880",
+  "IDENTITY_SUBSCRIPTION_ID": "d21798f8-eb17-4387-b164-a7168d77881c",
+  "PREFIX": "alz",
+  "LOCATION": "norwayeast",
+  "CONNECTIVITY_RESOURCE_GROUP": "rg-alz-connectivity",
+  "NETWORK_TYPE": "hubNetworking",
+  "AVAILABILITY_ZONES": [
+    "1",
+    "2",
+    "3"
+  ],
+  "ROOT_PARENT_MANAGEMENT_GROUP_ID": "contoso",
+  "RELEASE_VERSION": "v0.19.2",
+  "CONNECTIVITY_SUBSCRIPTION_ID": "4cb2be95-bb60-4223-8362-ec257c18f906"
+}
