@@ -6,7 +6,7 @@
   "PREFIX": "alz",
   "LOCATION": "norwayeast",
   "CONNECTIVITY_RESOURCE_GROUP": "rg-alz-connectivity",
-  "NETWORK_TYPE": "hubNetworking",
+  "NETWORK_TYPE": "vwanConnectivity",
   "AVAILABILITY_ZONES": [
     "1",
     "2",
