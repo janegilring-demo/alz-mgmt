@@ -91,7 +91,7 @@ ForEach ($subscription in $subscriptionsToClean) {
     Set-AzContext -Subscription $subscription.id | Out-Null
 
     # Get all Resource Groups in Subscription
-    $resourceGroups = Get-AzResourceGroup
+    $resourceGroups = Get-AzResourceGroup | Where-Object { $_.ResourceGroupName -notlike "rg-alz-mgmt-agents*" -and $_.ResourceGroupName -notlike "rg-alz-mgmt-identity*" }
 
     $resourceGroupsToRemove = @()
     ForEach ($resourceGroup in $resourceGroups) {
