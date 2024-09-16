@@ -3,10 +3,10 @@ param (
   [String]$Location = 'norwayeast',
 
   [Parameter()]
-  [String]$TemplateFile = './ad/main.bicep',
+  [String]$TemplateFile = './infra_tests/bicep/identity/ad/main.bicep',
 
   [Parameter()]
-  [String]$TemplateParameterFile = './ad/main.bicepparam',
+  [String]$TemplateParameterFile = './infra_tests/bicep/identity/ad/main.bicepparam',
 
   [Parameter()]
   [Boolean]$WhatIfEnabled = [System.Convert]::ToBoolean($($env:IS_PULL_REQUEST))
