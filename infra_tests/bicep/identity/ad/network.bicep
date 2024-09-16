@@ -279,3 +279,6 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.2.0' = {
 
 @description('The resource ID of the created Virtual Network Subnet.')
 output subnetResourceId string = virtualNetwork.outputs.subnetResourceIds[0]
+
+@description('The resource ID of the created Virtual Network .')
+output vnetResourceId string = virtualNetwork.outputs.resourceId
