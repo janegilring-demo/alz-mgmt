@@ -1,0 +1,45 @@
+﻿name: "Deploy Identity Active Directory Domain Controllers"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - infra_tests/bicep/identity/*.bicepparam
+      - infra_tests/bicep/identity/*.bicep
+  workflow_dispatch:
+
+  pull_request:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  SUBSCRIPTION_ID: "d21798f8-eb17-4387-b164-a7168d77881c"
+  IS_PULL_REQUEST: "${{ github.event_name == 'pull_request' }}"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: "OIDC Login To Tenant"
+        uses: azure/login@v2
+        with:
+          client-id: ${{ github.event_name == 'pull_request' && secrets.AZURE_CLIENT_ID_READ || secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Run Deployment Script
+        id: deploy
+        uses: azure/powershell@v2
+        with:
+          inlineScript: .\infra_tests\bicep\identity\pipeline-scripts\deploy-ad.ps1
+          azPSVersion: "12.2.0"
