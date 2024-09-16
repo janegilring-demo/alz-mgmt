@@ -33,9 +33,9 @@ jobs:
       - name: "OIDC Login To Tenant"
         uses: azure/login@v2
         with:
-          client-id: ${{ github.event_name == 'pull_request' && secrets.AZURE_CLIENT_ID_READ || secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: "d21798f8-eb17-4387-b164-a7168d77881c"
           enable-AzPSSession: true
 
       - name: Run Deployment Script
