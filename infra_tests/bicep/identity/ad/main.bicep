@@ -13,7 +13,21 @@ param tags object = {
 
 param virtualNetworkPeeringEnabled bool
 param hubVirtualNetworkResourceId string
-param keyVaultName string
+//param keyVaultName string
+param virtualNetworkName string
+param virtualNetworkAddressSpace string
+param virtualNetworkLocation string
+param virtualNetworkResourceGroupName string
+param virtualWanHubResourceGroupName string
+param virtualWanHubSubscriptionId string
+param virtualWanHubName string
+param virtualNetworkVwanEnableInternetSecurity bool
+param virtualWanHubConnectionName string
+param virtualWanHubConnectionAssociatedRouteTable string
+param virtualWanHubConnectionPropogatedRouteTables array
+param virtualWanHubConnectionPropogatedLabels array
+param vHubRoutingIntentEnabled bool
+param subscriptionId string
 
 resource ADResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: 'rg-ad'
@@ -33,10 +47,35 @@ module network 'network.bicep' = {
   name: 'ad-network-deployment'
   scope: ADResourceGroup
   params: {
-    virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
+    virtualNetworkPeeringEnabled: false // set to false until the AVM module supports vWAN hub connections
     hubVirtualNetworkResourceId: hubVirtualNetworkResourceId
     location: location
     tags: tags
+  }
+}
+
+module createLzVirtualWanConnection 'hubVirtualNetworkConnections.bicep' = if (virtualNetworkPeeringEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) && !empty(virtualWanHubResourceGroupName) && !empty(virtualWanHubSubscriptionId)) {
+  dependsOn: [
+    network
+  ]
+  scope: resourceGroup(virtualWanHubSubscriptionId, virtualWanHubResourceGroupName)
+  name: 'ad-network-hub-peering-deployment'
+  params: {
+    name: virtualWanHubConnectionName
+    virtualHubName: virtualWanHubName
+    remoteVirtualNetworkId: '/subscriptions/${subscriptionId}/resourceGroups/${virtualNetworkResourceGroupName}/providers/Microsoft.Network/virtualNetworks/${virtualNetworkName}'
+    enableInternetSecurity: virtualNetworkVwanEnableInternetSecurity
+    routingConfiguration: !vHubRoutingIntentEnabled
+      ? {
+          associatedRouteTable: {
+            id: virtualWanHubConnectionAssociatedRouteTable
+          }
+          propagatedRouteTables: {
+            ids: virtualWanHubConnectionPropogatedRouteTables
+            labels: virtualWanHubConnectionPropogatedLabels
+          }
+        }
+      : {}
   }
 }
 
